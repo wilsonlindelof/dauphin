@@ -1,0 +1,171 @@
+<!DOCTYPE html> 
+<html> 
+    
+<head> 
+    <title>Dauphin Plumbing Inc</title> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" 
+          content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" 
+          href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head> 
+    
+<body> 
+    <div class="container"> 
+        <h1 style="text-align:center;color:green;"> 
+          Pick a Pump 
+      </h1> 
+        <form> 
+            <div class="form-group"> 
+                <label for="gpm">How many gallons a minute (GPM) do you need?</label> 
+                <input id="gpm"
+                       class="form-control" 
+                       type="number"
+                       min="0"
+                       max="99" 
+                       placeholder="GPM (i.e. 12)"> 
+            </div>
+            <div class="form-group"> 
+                <label for="vertical">How many vertical feet of climb do you need?</label> 
+                <input id="vertical"
+                       class="form-control" 
+                       type="number"
+                       min="0"
+                       max="99"
+                       placeholder="Vertical feet (i.e. 17)"> 
+            </div>
+            <div class="form-group"> 
+                <label for="material">What type of material do you need?</label> 
+                <select id="material" name="material" class="form-control">
+                    <option value="any">Any</option>
+                    <option value="steel">Steel</option>
+                    <option value="aluminum">Aluminum</option>
+                    <option value="plastic">Plastic</option>
+                </select> 
+            </div>
+            <div class="form-group"> 
+                <button id="btn-alert"
+                        class="btn btn-success btn-lg float-right"> 
+                    Find your pump  
+                </button> 
+            </div> 
+        </form> 
+
+        <br /><br />
+        <br /><br />
+        <div id="cheapest"></div>
+        <br /><br />
+        <div id="best"></div>
+    </div> 
+    <script>
+        const pumps = [
+            {
+                name: 'Groundfos 8200',
+                gpm: 7,
+                climb: 22,
+                material: 'aluminum',
+                price: 450
+            },
+            {
+                name: 'Everbilt 4',
+                gpm: 4,
+                climb: 19,
+                material: 'plastic',
+                price: 200
+            },
+            {
+                name: 'Mr Pump 99',
+                gpm: 99,
+                climb: 300,
+                material: 'steel',
+                price: 1800
+            },
+            {
+                name: 'Groundfos 2B',
+                gpm: 17,
+                climb: 28,
+                material: 'aluminum',
+                price: 700
+            },
+            {
+                name: 'Everbilt 10',
+                gpm: 10,
+                climb: 20,
+                material: 'plastic',
+                price: 300
+            },
+            {
+                name: 'Pumpotron',
+                gpm: 31,
+                climb: 40,
+                material: 'steel',
+                price: 900
+            },
+        ]
+        document.getElementById("btn-alert").addEventListener("click", function(event){
+            event.preventDefault()
+            var gpm = document.getElementById("gpm").value.trim();
+            var verticalFeet = document.getElementById("vertical").value.trim();
+            var material = document.getElementById("material").value.trim();
+            if(!gpm) {
+                alert("Gallons Per Minute Cannot be empty!");
+            }
+            if(!verticalFeet) {
+                alert("Vertical Feet Cannot be empty!");
+            }
+            else {
+                let cheapestPump = null
+                let bestPerformingPump = null
+                pumps.forEach((pump) => {
+                    if (pump.material === material || material === 'any') {
+                        if (pump.gpm >= gpm && pump.climb >= verticalFeet) {
+                            if (!cheapestPump) {
+                                cheapestPump = pump
+                            }
+                            if (!bestPerformingPump) {
+                                bestPerformingPump = pump
+                            }
+
+                            if (pump.price < cheapestPump.price) {
+                                cheapestPump = pump
+                            }
+                            if (pump.gpm > bestPerformingPump.gpm) {
+                                bestPerformingPump = pump
+                            }
+                        }
+                    }
+                })
+                console.log('cheapest ', cheapestPump)
+                console.log('best ', bestPerformingPump)
+                document.getElementById('cheapest').setHTML(
+                    `<div style="padding: 50px; border: 2px solid #444; margin: 10px;">
+                        <h3>Cheapest compatible pump</h3>
+                        <br />
+                        <div>
+                            <div>Name: ${cheapestPump.name}</div>
+                            <div>Price: $${cheapestPump.price}</div>
+                            <div>GPM: ${cheapestPump.gpm}</div>
+                            <div>Vertical Feet: ${cheapestPump.climb}</div>
+                            <div>Material: ${cheapestPump.material}</div>
+                        </div>
+                    </div>`
+                )
+                document.getElementById('best').setHTML(
+                    `<div style="padding: 50px; border: 2px solid #444; margin: 10px;">
+                        <h3>Best compatible pump</h3>
+                        <br />
+                        <div>
+                            <div>Name: ${bestPerformingPump.name}</div>
+                            <div>Price: $${bestPerformingPump.price}</div>
+                            <div>GPM: ${bestPerformingPump.gpm}</div>
+                            <div>Vertical Feet: ${bestPerformingPump.climb}</div>
+                            <div>Material: ${bestPerformingPump.material}</div>
+                        </div>
+                    </div>`
+                )
+            }
+        });
+    </script>
+</body> 
+   
+</html>
