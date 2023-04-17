@@ -104,6 +104,8 @@
         ]
         document.getElementById("btn-alert").addEventListener("click", function(event){
             event.preventDefault()
+            document.getElementById('cheapest').setHTML('')
+            document.getElementById('best').setHTML('')
             var gpm = document.getElementById("gpm").value.trim();
             var verticalFeet = document.getElementById("vertical").value.trim();
             var material = document.getElementById("material").value.trim();
@@ -139,7 +141,7 @@
                 console.log('best ', bestPerformingPump)
                 document.getElementById('cheapest').setHTML(
                     `<div style="padding: 50px; border: 2px solid #444; margin: 10px;">
-                        <h3>Cheapest compatible pump</h3>
+                        <h3>${bestPerformingPump !== cheapestPump ? 'Cheapest compatible pump' : 'Cheapest AND Best compatible pump'}</h3>
                         <br />
                         <div>
                             <div>Name: ${cheapestPump.name}</div>
@@ -147,22 +149,31 @@
                             <div>GPM: ${cheapestPump.gpm}</div>
                             <div>Vertical Feet: ${cheapestPump.climb}</div>
                             <div>Material: ${cheapestPump.material}</div>
+                            <br />
+                            <div class="form-group"> 
+                                <button id="btn-alert"
+                                        class="btn btn-primary btn-lg float-right"> 
+                                    Buy Now  
+                                </button> 
+                            </div>
                         </div>
                     </div>`
                 )
-                document.getElementById('best').setHTML(
-                    `<div style="padding: 50px; border: 2px solid #444; margin: 10px;">
-                        <h3>Best compatible pump</h3>
-                        <br />
-                        <div>
-                            <div>Name: ${bestPerformingPump.name}</div>
-                            <div>Price: $${bestPerformingPump.price}</div>
-                            <div>GPM: ${bestPerformingPump.gpm}</div>
-                            <div>Vertical Feet: ${bestPerformingPump.climb}</div>
-                            <div>Material: ${bestPerformingPump.material}</div>
-                        </div>
-                    </div>`
-                )
+                if (bestPerformingPump !== cheapestPump) {
+                    document.getElementById('best').setHTML(
+                        `<div style="padding: 50px; border: 2px solid #444; margin: 10px;">
+                            <h3>Best compatible pump</h3>
+                            <br />
+                            <div>
+                                <div>Name: ${bestPerformingPump.name}</div>
+                                <div>Price: $${bestPerformingPump.price}</div>
+                                <div>GPM: ${bestPerformingPump.gpm}</div>
+                                <div>Vertical Feet: ${bestPerformingPump.climb}</div>
+                                <div>Material: ${bestPerformingPump.material}</div>
+                            </div>
+                        </div>`
+                    )
+                }                
             }
         });
     </script>
